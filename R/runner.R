@@ -99,7 +99,6 @@ cor_export_num <- function(JSON_str) {
   JSON_str <- stringr::str_replace_all(JSON_str, "age\":", "age\":!")
   JSON_str <- stringr::str_split_fixed(JSON_str, "!", n = Inf)
   JSON_res <- JSON_str[1]
-  print(JSON_res)
   for (i in 2:length(JSON_str)) {
     if (!stringr::str_detect(stringr::str_sub(JSON_str[i], 1, 10), "\\.")) {
       JSON_str[i] <-
@@ -113,25 +112,19 @@ cor_export_num <- function(JSON_str) {
   }
   JSON_mtx <-
     stringr::str_replace_all(JSON_res, "host_distances\":", "host_distances\":!")
-  print(5)
-  print(JSON_mtx)
   JSON_mtx <- stringr::str_split_fixed(JSON_mtx, "!", n = Inf)
-  print(4)
-  print(JSON_mtx)
-  JSON_juk <- stringr::str_replace_all(JSON_mtx[2], "]", "]!")
-  print(4)
-  print(JSON_mtx)
-  JSON_juk <- stringr::str_split_fixed(JSON_juk, "!", n = Inf)
-  print(3)
-  print(JSON_juk)
-  JSON_juk[1] <- stringr::str_replace_all(JSON_juk[1], "0,", "0.0,")
-  JSON_juk[1] <- stringr::str_replace_all(JSON_juk[1], " 0 ]", " 0.0 ]")
-  JSON_juk <- stringr::str_c(JSON_juk[1], JSON_juk[2])
-  print(2)
-  print(JSON_juk)
-  JSON_mtx <- stringr::str_c(JSON_mtx[1], JSON_juk)
-  print(1)
-  print(JSON_mtx)
+
+  # Check if the field host distances is part of the json file
+  if (length(JSON_mtx) >= 2) {
+    JSON_juk <- stringr::str_replace_all(JSON_mtx[2], "]", "]!")
+    JSON_juk <- stringr::str_split_fixed(JSON_juk, "!", n = Inf)
+    JSON_juk[1] <- stringr::str_replace_all(JSON_juk[1], "0,", "0.0,")
+    JSON_juk[1] <- stringr::str_replace_all(JSON_juk[1], " 0 ]", " 0.0 ]")
+    JSON_juk <- stringr::str_c(JSON_juk[1], JSON_juk[2])
+    JSON_mtx <- stringr::str_c(JSON_mtx[1], JSON_juk)
+  } else {
+    JSON_mtx <- JSON_mtx[1]
+  }
 
   return(JSON_mtx)
 }
