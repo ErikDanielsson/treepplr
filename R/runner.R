@@ -86,7 +86,7 @@ tp_write <- function(model = NULL,
   if (!is.null(data)) {
     input_json <- RJSONIO::toJSON(data)
     if (class(model) == "hostrep3states" ||
-        class(model) == "hostrep2states") {
+      class(model) == "hostrep2states") {
       input_json <- treepplr:::cor_export_num(input_json)
     }
     write(input_json, file = paste0(dir, data_name, ".json"))
@@ -99,6 +99,7 @@ cor_export_num <- function(JSON_str) {
   JSON_str <- stringr::str_replace_all(JSON_str, "age\":", "age\":!")
   JSON_str <- stringr::str_split_fixed(JSON_str, "!", n = Inf)
   JSON_res <- JSON_str[1]
+  print(JSON_res)
   for (i in 2:length(JSON_str)) {
     if (!stringr::str_detect(stringr::str_sub(JSON_str[i], 1, 10), "\\.")) {
       JSON_str[i] <-
@@ -112,13 +113,19 @@ cor_export_num <- function(JSON_str) {
   }
   JSON_mtx <-
     stringr::str_replace_all(JSON_res, "host_distances\":", "host_distances\":!")
+  print(JSON_mtx)
   JSON_mtx <- stringr::str_split_fixed(JSON_mtx, "!", n = Inf)
+  print(JSON_juk)
   JSON_juk <- stringr::str_replace_all(JSON_mtx[2], "]", "]!")
+  print(JSON_juk)
   JSON_juk <- stringr::str_split_fixed(JSON_juk, "!", n = Inf)
+  print(JSON_juk)
   JSON_juk[1] <- stringr::str_replace_all(JSON_juk[1], "0,", "0.0,")
   JSON_juk[1] <- stringr::str_replace_all(JSON_juk[1], " 0 ]", " 0.0 ]")
   JSON_juk <- stringr::str_c(JSON_juk[1], JSON_juk[2])
+  print(JSON_juk)
   JSON_mtx <- stringr::str_c(JSON_mtx[1], JSON_juk)
+  print(JSON_mtx)
 
   return(JSON_mtx)
 }
@@ -154,10 +161,10 @@ tp_run <- function(model_name = "input",
                    method = "smc-bpf",
                    samples = 1000,
                    run = "1") {
-
   # check inputs
-  if (method == "smc-apf")
+  if (method == "smc-apf") {
     samples <- samples + 1
+  }
 
   # if dir_path = NULL return temp_dir, if not return dir
   dir_path <- tp_tempdir()
