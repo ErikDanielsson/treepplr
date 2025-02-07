@@ -86,7 +86,7 @@ tp_write <- function(model = NULL,
   if (!is.null(data)) {
     input_json <- RJSONIO::toJSON(data)
     if (class(model) == "hostrep3states" ||
-      class(model) == "hostrep2states") {
+        class(model) == "hostrep2states") {
       input_json <- treepplr:::cor_export_num(input_json)
     }
     write(input_json, file = paste0(dir, data_name, ".json"))
@@ -161,9 +161,8 @@ tp_run <- function(model_name = "input",
                    samples = 1000,
                    run = "1") {
   # check inputs
-  if (method == "smc-apf") {
+  if (method == "smc-apf")
     samples <- samples + 1
-  }
 
   # if dir_path = NULL return temp_dir, if not return dir
   dir_path <- tp_tempdir()
